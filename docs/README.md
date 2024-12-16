@@ -41,3 +41,27 @@ pip install -r requirements.txt
 ```bash
 python src/main.py
 ```
+
+# Project Structure
+
+## Source Code (`src/`)
+- `gui.py` - GUI interface and controls
+- `plot.py` - Real-time plotting and LPC functionality  
+- `analysis.py` - LPC coefficient calculation
+- `stock_simulation.py` - Stock price simulation with GBM
+- `synthesis.py` - Signal generation (LPC synthesis)
+- `utils.py` - Utility functions like frequency response and cepstral conversions
+- `main.py` - Main script to choose between GUI or testing modules
+- `convert_to_excel.py` - Data saving to Excel
+- `__init__.py` - Module initialization
+
+## Documentation (`docs/`)
+- `README.md` - Project overview and setup instructions
+- `core_dsp_components.md` - Details on DSP processing
+- `core_gui_components.md` - GUI structure and interactions
+
+## Tests (`tests/`)
+- `test_analysis.py` - Unit tests for analysis module
+- `test_synthesis.py` - Unit tests for synthesis module
+requirements.txt        # Dependencies for the project
+.gitignore              # Git ignore file
