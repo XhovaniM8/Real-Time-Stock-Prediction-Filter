@@ -22,3 +22,22 @@ This project demonstrates how Linear Predictive Coding (LPC) can be applied in r
  ```bash
  git clone https://github.com/your-username/real-time-stock-prediction-filter.git
  cd real-time-stock-prediction-filter
+```
+
+2. Set Up a Python Virtual Environment (Optional)
+
+```bash
+python3 -m venv .venv
+```
+
+3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Run the Application
+
+```bash
+python src/main.py
+```

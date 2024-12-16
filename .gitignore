@@ -60,3 +60,6 @@ target/
 # Historical Data
 /data/historical/
 /config.py
+
+.idea
+.DS_Store
