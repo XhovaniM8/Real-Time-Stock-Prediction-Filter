@@ -11,8 +11,7 @@ This project demonstrates how Linear Predictive Coding (LPC) can be applied in r
   - Window Size
   - Decay Factor
 - Predictive success rate and performance metrics displayed in real time.
-- Data export functionality for further analysis in Excel.
-
+  
 ## Requirements
 - Python 3.8+
 - Required dependencies (install via `requirements.txt`):
