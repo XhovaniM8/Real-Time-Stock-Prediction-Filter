@@ -6,19 +6,25 @@ import threading
 from plot import real_time_plot  # Import the plotting function
 from convert_to_excel import save_to_excel  # Import the save function (Not currently functioning)
 
-plot_running = False  # Global flag to control the plotting thread
-raw_prices = []  # Global list to store raw prices
-filtered_prices = []  # Global list to store filtered prices
+# Global variables
+plot_running = False  # Flag to control the plotting thread
+raw_prices = []  # List to store raw prices
+filtered_prices = []  # List to store filtered prices
+
 
 def CreateGUI():
+    """Create the main GUI for real-time stock price prediction."""
     global plot_running
 
+    # Initialize the main window
     root = tk.Tk()
     root.title("Real-Time Stock Price Prediction Filter")
 
-    # Left Frame for Controls
+    # Control Frame (Left Panel)
     control_frame = tk.Frame(root)
     control_frame.grid(row=0, column=0, sticky="n", padx=10, pady=10)
+
+    # SLIDERS BEGIN
 
     # LPC Order Slider
     tk.Label(control_frame, text="LPC Order").grid(row=0, column=0, columnspan=2, pady=5)
@@ -38,13 +44,15 @@ def CreateGUI():
 
     # Decay Factor Slider
     tk.Label(control_frame, text="Decay Factor").grid(row=4, column=0, columnspan=2, pady=5)
-    decay_factor = DoubleVar(value=0.1)  # Default decay factor
+    decay_factor = DoubleVar(value=0.1)
     tk.Scale(
         control_frame, from_=0.01, to=1.0, resolution=0.01, orient="horizontal", variable=decay_factor,
         command=lambda _: slider_changed()
     ).grid(row=5, column=0, columnspan=2, pady=5)
 
-    # Main Frame for Plot
+    # SLIDERS END
+
+    # Plot Frame (Right Panel)
     plot_frame = tk.Frame(root)
     plot_frame.grid(row=0, column=1, sticky="nsew", padx=10, pady=10)
 
@@ -52,12 +60,12 @@ def CreateGUI():
     canvas = FigureCanvasTkAgg(fig, master=plot_frame)
     canvas.get_tk_widget().pack(fill="both", expand=True)
 
-    # Start and Stop Buttons
+    # Start Plotting
     def start_plot():
         global plot_running, raw_prices, filtered_prices
         if not plot_running:
             plot_running = True
-            if not raw_prices:  # Clear only if they are empty (i.e., not already running)
+            if not raw_prices:  # Clear prices only if the thread is not running
                 raw_prices.clear()
                 filtered_prices.clear()
             threading.Thread(
@@ -66,27 +74,32 @@ def CreateGUI():
                 daemon=True
             ).start()
 
+    # Stop Plotting
     def stop_plot():
         global plot_running
         plot_running = False
 
-    tk.Button(control_frame, text="Start Plotting", command=start_plot).grid(row=6, column=0, columnspan=2, pady=5)
-    tk.Button(control_frame, text="Stop Plotting", command=stop_plot).grid(row=7, column=0, columnspan=2, pady=5)
-
-    # Save Data Button
+    # Save Data to Excel
     def save_data():
-        global raw_prices, filtered_prices
         if raw_prices and filtered_prices:
             save_to_excel(raw_prices, filtered_prices, "stock_analysis.xlsx")
             print("Data saved to 'stock_analysis.xlsx'")
         else:
             print("No data to save. Please start and stop the plot first.")
-    tk.Button(control_frame, text="Save Data to Excel", command=save_data).grid(row=8, column=0, columnspan=2, pady=5)
 
-    # Function to handle slider changes
+    # Control Buttons
+    tk.Button(control_frame, text="Start Plotting", command=start_plot).grid(row=6, column=0, columnspan=2, pady=5)
+    tk.Button(control_frame, text="Stop Plotting", command=stop_plot).grid(row=7, column=0, columnspan=2, pady=5)
+    # tk.Button(control_frame, text="Save Data to Excel", command=save_data).grid(row=8, column=0, columnspan=2, pady=5)
+
+    # Slider Change Handler
     def slider_changed():
         """Stop the plot when sliders are adjusted."""
         stop_plot()
 
-    # Run the GUI
+    # Start the GUI event loop
     root.mainloop()
+
+
+if __name__ == "__main__":
+    CreateGUI()

@@ -12,14 +12,6 @@ fetch_stock_price.t = 0
 # --------------------------------------------------------------
 
 def set_smooth_ylim(ax, all_prices, margin=5):
-    """
-    Dynamically adjust Y-axis limits with a margin to reduce plot jumping.
-
-    Parameters:
-        ax (matplotlib.axes.Axes): The axis object to modify.
-        all_prices (list): Combined list of raw and filtered prices.
-        margin (float): Margin to add above and below the data range.
-    """
     min_price, max_price = min(all_prices), max(all_prices)
     current_ylim = ax.get_ylim()
     target_ylim = (min_price - margin, max_price + margin)
@@ -32,16 +24,6 @@ def set_smooth_ylim(ax, all_prices, margin=5):
     ax.set_ylim(new_ylim)
 
 def apply_decay(coeffs, decay_factor):
-    """
-    Applies exponential decay to LPC coefficients.
-
-    Parameters:
-        coeffs (np.ndarray): The LPC coefficients.
-        decay_factor (float): The decay factor (0 to 1). Higher values retain more weight on older coefficients.
-
-    Returns:
-        np.ndarray: The decayed LPC coefficients.
-    """
     decay_weights = np.exp(-decay_factor * np.arange(len(coeffs)))
     return coeffs * decay_weights
 
@@ -50,20 +32,6 @@ def apply_decay(coeffs, decay_factor):
 # --------------------------------------------------------------
 
 def real_time_plot(lpc_order, window_size, decay_factor, fig, ax, canvas, plot_running, raw_prices, filtered_prices):
-    """
-    Plot the stock price data in real-time alongside LPC-filtered predictions with a decay factor.
-
-    Parameters:
-        lpc_order (tk.IntVar): Variable controlling the LPC order.
-        window_size (tk.IntVar): Variable controlling the window size for LPC.
-        decay_factor (tk.DoubleVar): Variable controlling the exponential decay factor.
-        fig (matplotlib.figure.Figure): The figure object for plotting.
-        ax (matplotlib.axes.Axes): The axis object for plotting.
-        canvas (FigureCanvasTkAgg): The canvas to draw the plot.
-        plot_running (function): Callback to check if the plot should keep running.
-        raw_prices (list): List to store raw stock prices.
-        filtered_prices (list): List to store LPC-filtered prices.
-    """
     success_count = 0
     total_predictions = 0
     margin_of_error = None  # Dynamically calculated during the run
@@ -75,7 +43,7 @@ def real_time_plot(lpc_order, window_size, decay_factor, fig, ax, canvas, plot_r
 
         # Dynamically calculate margin of error based on recent raw prices
         if len(raw_prices) > 1:
-            margin_of_error = np.std(raw_prices[-window_size.get():]) * 0.5  # Example: Half the recent volatility
+            margin_of_error = np.std(raw_prices[-window_size.get():]) * 0.5  # Half the recent volatility
 
         # Apply LPC filter if enough data points exist
         if len(raw_prices) >= lpc_order.get():
@@ -107,8 +75,8 @@ def real_time_plot(lpc_order, window_size, decay_factor, fig, ax, canvas, plot_r
 
         # Add predictive success rate to the plot title
         ax.set_title(
-            f"Full Stock Price Climb with LPC Filtering\n"
-            f"Predictive Success Rate: {success_rate:.2f}% | Decay Factor: {decay_factor.get():.2f}"
+            f"Stock Price with LPC Filtering\n"
+            f"Predictive Success Rate: {success_rate:.2f}"
         )
         ax.set_xlabel("Time")
         ax.set_ylabel("Price")

@@ -1,6 +1,5 @@
 import numpy as np
 
-
 # --------------------------------------------------------------
 # LPC (Linear Predictive Coding) Analysis Functions
 # --------------------------------------------------------------
@@ -59,7 +58,7 @@ def arburg_matrix(X, order=1):
     Calculates LPC coefficients for multiple time series data.
 
     Parameters:
-        X (numpy.ndarray): Matrix of time series data. Shape: n x obs.
+        X (numpy.ndarray): Matrix of time series data. Shape: (n, obs).
         order (int): LPC order. Must be > 0.
 
     Returns:
@@ -82,7 +81,7 @@ def arburg_matrix(X, order=1):
     for m in range(order):
         # Calculate reflection coefficients
         k = (-2 * np.einsum('ij,ij->j', ebp, efp)) / (
-                np.einsum('ij,ij->j', efp, efp) + np.einsum('ij,ij->j', ebp, ebp)
+            np.einsum('ij,ij->j', efp, efp) + np.einsum('ij,ij->j', ebp, ebp)
         )
         ref[m, :] = k
 
@@ -110,6 +109,14 @@ def arburg_matrix(X, order=1):
 def arburg_warped_vector(x, order=1, warp_factor=0):
     """
     Calculates frequency-warped LPC coefficients from time series data.
+
+    Parameters:
+        x (numpy.ndarray): Vector of time series data.
+        order (int): LPC order. Must be > 0.
+        warp_factor (float): Frequency warping factor.
+
+    Returns:
+        tuple: LPC coefficients (a), error power (E), and reflection coefficients (ref).
     """
     N = len(x)
     E = np.dot(x, x) / N
@@ -135,3 +142,5 @@ def arburg_warped_vector(x, order=1, warp_factor=0):
         aa = np.concatenate((a, [0]))
         J = np.eye(len(aa))[::-1]
         a = aa + ref[index]
+
+    return a, E, ref

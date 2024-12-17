@@ -6,7 +6,6 @@ from gui import CreateGUI  # Import the GUI function to launch the application
 
 np.seterr(invalid='ignore')  # Suppress numpy warnings
 
-
 def test_analysis_module():
     """Test the functions in the analysis module."""
     print("Testing Analysis Module...")
