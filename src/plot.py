@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from analysis import arburg_vector
 from stock_simulation import fetch_stock_price
 import time
@@ -7,10 +6,7 @@ import time
 # Initialize a static variable to track time for stock price simulation
 fetch_stock_price.t = 0
 
-# --------------------------------------------------------------
 # Utility Functions
-# --------------------------------------------------------------
-
 def set_smooth_ylim(ax, all_prices, margin=5):
     min_price, max_price = min(all_prices), max(all_prices)
     current_ylim = ax.get_ylim()
@@ -27,10 +23,8 @@ def apply_decay(coeffs, decay_factor):
     decay_weights = np.exp(-decay_factor * np.arange(len(coeffs)))
     return coeffs * decay_weights
 
-# --------------------------------------------------------------
-# Real-Time Plotting Function
-# --------------------------------------------------------------
 
+# Real-Time Plotting Function
 def real_time_plot(lpc_order, window_size, decay_factor, fig, ax, canvas, plot_running, raw_prices, filtered_prices):
     success_count = 0
     total_predictions = 0
@@ -91,12 +85,3 @@ def real_time_plot(lpc_order, window_size, decay_factor, fig, ax, canvas, plot_r
 
         # Sleep to maintain 30 FPS
         time.sleep(1 / 30)
-
-# --------------------------------------------------------------
-# Notes
-# --------------------------------------------------------------
-# - `fetch_stock_price`: Simulates stock price data in real-time.
-# - `arburg_vector`: Performs LPC analysis to predict the next price.
-# - `apply_decay`: Applies an exponential decay factor to prioritize recent coefficients.
-# - `real_time_plot`: Combines raw prices, filtered LPC predictions, and predictive success rate with decay factor.
-# - Decay factor allows fine-tuning of the prediction model's sensitivity to recent trends.
